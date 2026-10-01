@@ -13,15 +13,15 @@
         const savedLang = localStorage.getItem('selectedLang');
         
         if (savedLang === 'ua') {
-            window.location.replace('/ua/');
+            window.location.replace('/page/ua/');
         } else if (savedLang === 'ru') {
-            window.location.replace('/ru/');
+            window.location.replace('/page/ru/');
         } else {
             const browserLang = navigator.language || navigator.userLanguage;
             if (browserLang.toLowerCase().includes('uk') || browserLang.toLowerCase().includes('ua')) {
-                window.location.replace('/ua/');
+                window.location.replace('/page/ua/');
             } else {
-                window.location.replace('/ru/');
+                window.location.replace('/page/ru/');
             }
         }
     </script>
