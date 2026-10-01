@@ -1,0 +1,355 @@
+  :root {
+    --navy:        #0A1526;
+    --blue-fusion: #5B7FA0;
+    --baltic:      #8BAFC4;
+    --ice:         #C8D6DF;
+    --cloud:       #F0EEE8;
+    --gold:        #D4A843;
+    --soft-gold:   #C9A96E;
+    --near-white:  #F8F6F1;
+
+    --col: 430px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--navy);
+    color: var(--near-white);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    /* very subtle radial lift behind the whole column */
+    background-image:
+      radial-gradient(120% 55% at 50% 10%, rgba(91,127,160,0.10) 0%, rgba(10,21,38,0) 55%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    opacity: 0;
+    animation: page-in 1.2s ease forwards;
+  }
+
+  @keyframes page-in {
+    to { opacity: 1; }
+  }
+
+    /* Дополнительные стили для кнопок переключения языков */
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .lang-btn {
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #9ca3af;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            text-transform: uppercase;
+        }
+
+        .lang-btn.active {
+            background: #ffffff;
+            color: #0d0e12;
+            border-color: #ffffff;
+        }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--col);
+    margin: 0 auto;
+    padding: 0 24px calc(56px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ---------- HERO / PHOTO ---------- */
+  .hero {
+    position: relative;
+    width: 100%;
+    margin-top: clamp(8px, 4vw, 28px);
+    aspect-ratio: 843 / 1264;
+    /* opacity + rise on load */
+    opacity: 0;
+    transform: translateY(26px);
+    animation: photo-in 1.7s cubic-bezier(.22,.61,.36,1) 0.25s forwards;
+  }
+
+  @keyframes photo-in {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 18%;
+    /* dissolve ALL four edges to transparent so the page navy shows through —
+       the edges are literally the background, so there is no hard transition */
+    -webkit-mask-image:
+      linear-gradient(to bottom,
+        rgba(0,0,0,0) 0%, rgba(0,0,0,1) 9%,
+        rgba(0,0,0,1) 56%, rgba(0,0,0,0) 87%),
+      linear-gradient(to right,
+        rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%,
+        rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+    -webkit-mask-composite: source-in;
+            mask-image:
+      linear-gradient(to bottom,
+        rgba(0,0,0,0) 0%, rgba(0,0,0,1) 9%,
+        rgba(0,0,0,1) 56%, rgba(0,0,0,0) 87%),
+      linear-gradient(to right,
+        rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%,
+        rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+            mask-composite: intersect;
+  }
+
+  /* gentle fade of her lower blazer into the buttons section
+     (kept clear of the outer edges, which the image mask already dissolves) */
+  .hero__vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(to bottom,
+        rgba(10,21,38,0) 60%,
+        rgba(10,21,38,0.55) 80%,
+        rgba(10,21,38,0) 90%);
+  }
+
+  /* multiply veil — sinks the lit part of the wall toward navy;
+     fades to zero before the edges so it never paints a rectangle */
+  .hero__darken {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    background:
+      radial-gradient(74% 70% at 50% 34%,
+        rgba(10,21,38,0) 40%,
+        rgba(10,21,38,0.72) 62%,
+        rgba(10,21,38,0.72) 74%,
+        rgba(10,21,38,0) 88%);
+  }
+
+  /* breathing light behind her — augments the baked-in spotlight */
+  .hero__glow {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    width: 86%;
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+    background:
+      radial-gradient(closest-side,
+        rgba(139,175,196,0.22) 0%,
+        rgba(91,127,160,0.11) 40%,
+        rgba(91,127,160,0.03) 62%,
+        rgba(91,127,160,0) 74%);
+    animation: breathe 9s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.5;  }
+    50%      { transform: translate(-50%, -50%) scale(1.05); opacity: 0.95; }
+  }
+
+  /* ---------- IDENTITY ---------- */
+  .identity {
+    text-align: center;
+    margin-top: clamp(-205px, -48vw, -140px);
+    position: relative;
+    z-index: 2;
+    /* soft dark halo keeps light text crisp where it sits over the blazer */
+    text-shadow: 0 2px 22px rgba(10,21,38,0.6), 0 1px 3px rgba(10,21,38,0.45);
+  }
+
+  .identity__name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: clamp(2.5rem, 11vw, 3.0rem);
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    color: var(--near-white);
+  }
+
+  .identity__role {
+    margin-top: 12px;
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ice);
+  }
+
+  .identity__tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.02rem, 4vw, 1.2rem);
+    line-height: 1.42;
+    letter-spacing: 0.01em;
+    color: var(--soft-gold);
+    margin: 16px auto 0;
+    max-width: 34rem;
+    text-wrap: pretty;
+  }
+
+  /* thin gold rule */
+  .rule {
+    width: 54px;
+    height: 1px;
+    border: 0;
+    margin: clamp(26px, 7vw, 34px) auto;
+    background: linear-gradient(to right,
+      rgba(212,168,67,0) 0%,
+      rgba(212,168,67,0.9) 50%,
+      rgba(212,168,67,0) 100%);
+  }
+
+  /* ---------- LINKS ---------- */
+  .links {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    padding: 18px 22px;
+    border-radius: 14px;
+    border: 1px solid rgba(139,175,196,0.28);
+    background: rgba(200,214,223,0.045);
+    color: var(--near-white);
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform .5s cubic-bezier(.22,.61,.36,1),
+      border-color .5s ease,
+      background-color .5s ease,
+      box-shadow .5s ease;
+
+    /* staggered reveal */
+    opacity: 0;
+    transform: translateY(16px);
+    animation: link-in .9s cubic-bezier(.22,.61,.36,1) forwards;
+    animation-delay: var(--d, 0s);
+  }
+
+  @keyframes link-in {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* thin gold accent line that grows on hover */
+  .link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    transform: translateX(-50%);
+    background: linear-gradient(to right,
+      rgba(212,168,67,0) 0%,
+      rgba(212,168,67,1) 50%,
+      rgba(212,168,67,0) 100%);
+    transition: width .55s cubic-bezier(.22,.61,.36,1);
+  }
+
+  .link__label {
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--near-white);
+  }
+
+  .link__note {
+    margin-top: 5px;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--soft-gold);
+  }
+
+  @media (hover: hover) {
+    .link:hover {
+      transform: translateY(-3px);
+      border-color: rgba(212,168,67,0.65);
+      background: rgba(200,214,223,0.08);
+      box-shadow: 0 10px 30px -14px rgba(212,168,67,0.45);
+    }
+    .link:hover::after { width: 60%; }
+    .link:hover .link__label { color: var(--near-white); }
+  }
+
+  .link:active { transform: translateY(-1px) scale(0.992); }
+
+  /* divider between free entries and paid products */
+  .divider {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+    opacity: 0;
+    animation: link-in .9s ease forwards;
+    animation-delay: var(--d, 0s);
+  }
+  .divider::before,
+  .divider::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(to right,
+      rgba(212,168,67,0) 0%,
+      rgba(212,168,67,0.5) 100%);
+  }
+  .divider::after { transform: scaleX(-1); }
+  .divider__dot {
+    width: 5px;
+    height: 5px;
+    margin: 0 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(212,168,67,0.6);
+    flex: 0 0 auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001s !important;
+      animation-delay: 0s !important;
+      transition-duration: 0.001s !important;
+    }
+    body, .hero, .link, .divider { opacity: 1 !important; transform: none !important; }
+  }
